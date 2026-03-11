@@ -1,7 +1,7 @@
 // This file is part of zinc64.
 // Copyright (c) 2016-2019 Sebastian Jastrzebski. All rights reserved.
 // Licensed under the GPLv3. See LICENSE file in the project root for full license text.
-#![cfg_attr(feature = "cargo-clippy", allow(clippy::cast_lossless))]
+#![allow(clippy::cast_lossless)]
 
 use std::fs::File;
 use std::io::BufReader;
@@ -232,7 +232,7 @@ impl Screen<AppState> for MainScreen {
                 },
                 WindowEvent::DroppedFile(path) => {
                     // info!("Dropped file {}", path);
-                    match self.load_image(app_state, &path) {
+                    match self.load_image(app_state, path) {
                         Ok(_) => (),
                         Err(err) => error!("Failed to load image, error: {}", err),
                     }
@@ -257,10 +257,7 @@ impl Screen<AppState> for MainScreen {
             let command_maybe = state.debug.poll(debugging);
             if let Some(command) = command_maybe {
                 let result = state.debug.execute(&mut state.c64, &command);
-                match result {
-                    Ok(Some(new_state)) => self.set_state(state, new_state),
-                    _ => (),
-                }
+                if let Ok(Some(new_state)) = result { self.set_state(state, new_state) }
             } else {
                 break;
             }

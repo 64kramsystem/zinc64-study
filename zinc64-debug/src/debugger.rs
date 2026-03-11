@@ -2,10 +2,10 @@
 // Copyright (c) 2016-2019 Sebastian Jastrzebski. All rights reserved.
 // Licensed under the GPLv3. See LICENSE file in the project root for full license text.
 
-#![cfg_attr(feature = "cargo-clippy", allow(clippy::cast_lossless))]
+#![allow(clippy::cast_lossless)]
 
 use std::io;
-use std::io::{BufRead, BufReader, BufWriter, Cursor, Error, ErrorKind, Write};
+use std::io::{BufRead, BufReader, BufWriter, Cursor, Error, Write};
 use std::net::{SocketAddr, TcpListener, TcpStream};
 use std::sync::mpsc;
 use std::u16;
@@ -76,14 +76,12 @@ impl Debugger {
 
     pub fn start(&self, addr: SocketAddr) -> io::Result<()> {
         let listener = TcpListener::bind(addr)?;
-        for stream in listener.incoming() {
-            if let Ok(stream) = stream {
-                let mut conn = Connection::build(self.command_tx.clone(), &stream).unwrap();
-                match conn.handle() {
-                    Ok(_) => info!(target: "debugger", "Connection closed"),
-                    Err(error) => {
-                        error!(target: "debugger", "Connection failed, error - {}", error)
-                    }
+        for stream in listener.incoming().flatten() {
+            let mut conn = Connection::build(self.command_tx.clone(), &stream).unwrap();
+            match conn.handle() {
+                Ok(_) => info!(target: "debugger", "Connection closed"),
+                Err(error) => {
+                    error!(target: "debugger", "Connection failed, error - {}", error)
                 }
             }
         }
@@ -189,16 +187,16 @@ impl Connection {
     fn read_mem(&mut self, start: u16, end: u16) -> io::Result<Vec<u8>> {
         match self.execute_emu(Command::MemRead(start, end))? {
             Output::Buffer(data) => Ok(data),
-            Output::Error(error) => Err(Error::new(ErrorKind::Other, error)),
-            _ => Err(Error::new(ErrorKind::Other, "Invalid debugger result")),
+            Output::Error(error) => Err(Error::other(error)),
+            _ => Err(Error::other("Invalid debugger result")),
         }
     }
 
     fn read_regs(&mut self) -> io::Result<RegData> {
         match self.execute_emu(Command::RegRead)? {
             Output::Registers(regs) => Ok(regs),
-            Output::Error(error) => Err(Error::new(ErrorKind::Other, error)),
-            _ => Err(Error::new(ErrorKind::Other, "Invalid debugger result")),
+            Output::Error(error) => Err(Error::other(error)),
+            _ => Err(Error::other("Invalid debugger result")),
         }
     }
 
@@ -591,38 +589,38 @@ impl Connection {
         self.command_tx.send(command).unwrap();
         self.response_rx
             .recv()
-            .map_err(|error| Error::new(ErrorKind::Other, error))
+            .map_err(Error::other)
     }
 
     fn execute_buffer_cmd(&mut self, command: Command) -> io::Result<Vec<u8>> {
         match self.execute_emu(command)? {
             Output::Buffer(buffer) => Ok(buffer),
-            Output::Error(error) => Err(Error::new(ErrorKind::Other, error)),
-            _ => Err(Error::new(ErrorKind::Other, "Invalid debugger result")),
+            Output::Error(error) => Err(Error::other(error)),
+            _ => Err(Error::other("Invalid debugger result")),
         }
     }
 
     fn execute_num_cmd(&mut self, command: Command) -> io::Result<u16> {
         match self.execute_emu(command)? {
             Output::Number(num) => Ok(num),
-            Output::Error(error) => Err(Error::new(ErrorKind::Other, error)),
-            _ => Err(Error::new(ErrorKind::Other, "Invalid debugger result")),
+            Output::Error(error) => Err(Error::other(error)),
+            _ => Err(Error::other("Invalid debugger result")),
         }
     }
 
     fn execute_text_cmd(&mut self, command: Command) -> io::Result<String> {
         match self.execute_emu(command)? {
             Output::Text(text) => Ok(text),
-            Output::Error(error) => Err(Error::new(ErrorKind::Other, error)),
-            _ => Err(Error::new(ErrorKind::Other, "Invalid debugger result")),
+            Output::Error(error) => Err(Error::other(error)),
+            _ => Err(Error::other("Invalid debugger result")),
         }
     }
 
     fn execute_unit_cmd(&mut self, command: Command) -> io::Result<String> {
         match self.execute_emu(command)? {
             Output::Unit => Ok(String::new()),
-            Output::Error(error) => Err(Error::new(ErrorKind::Other, error)),
-            _ => Err(Error::new(ErrorKind::Other, "Invalid debugger result")),
+            Output::Error(error) => Err(Error::other(error)),
+            _ => Err(Error::other("Invalid debugger result")),
         }
     }
 
@@ -1152,8 +1150,7 @@ impl CommandHelp {
                 "help" | "?" => CommandHelp::help_cmd("help", "?"),
                 "quit" => CommandHelp::help_cmd("quit", ""),
                 "radix" => CommandHelp::help_cmd("radix <num>", ""),
-                _ => Err(Error::new(
-                    ErrorKind::Other,
+                _ => Err(Error::other(
                     format!("Invalid command {}", command),
                 )),
             }
@@ -1182,14 +1179,14 @@ impl CommandHelp {
         buffer.push_str("disable (dis)\n");
         buffer.push_str("ignore\n");
         buffer.push_str("until (un)\n");
-        buffer.push_str("\n");
+        buffer.push('\n');
         buffer.push_str("* Debug *\n");
         buffer.push_str("goto (g)\n");
         buffer.push_str("next (n)\n");
         buffer.push_str("registers (r)\n");
         buffer.push_str("return (ret)\n");
         buffer.push_str("step (z)\n");
-        buffer.push_str("\n");
+        buffer.push('\n');
         buffer.push_str("* Memory *\n");
         buffer.push_str("compare (c)\n");
         buffer.push_str("disass (d)\n");
@@ -1199,18 +1196,18 @@ impl CommandHelp {
         buffer.push_str("memchar (mc)\n");
         buffer.push_str("move (t)\n");
         buffer.push_str("petscii (i)\n");
-        buffer.push_str("\n");
+        buffer.push('\n');
         buffer.push_str("* System *\n");
         buffer.push_str("reset\n");
         buffer.push_str("screen (sc)\n");
         buffer.push_str("stopwatch (sw)\n");
-        buffer.push_str("\n");
+        buffer.push('\n');
         buffer.push_str("* Monitor *\n");
         buffer.push_str("exit (x)\n");
         buffer.push_str("help (?)\n");
         buffer.push_str("quit\n");
         buffer.push_str("radix\n");
-        buffer.push_str("\n");
+        buffer.push('\n');
         Ok(buffer)
     }
 }

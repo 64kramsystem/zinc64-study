@@ -42,6 +42,12 @@ pub struct Pla {
     mode: Mode,
 }
 
+impl Default for Pla {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl Pla {
     pub fn new() -> Self {
         let map = MemoryMap::default();

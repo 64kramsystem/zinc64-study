@@ -189,7 +189,7 @@ impl Batch {
                     uniforms: &[
                         (
                             &gl.get_uniform(&self.shader, "u_projection"),
-                            gl::UniformData::Mat4(self.projection.clone()),
+                            gl::UniformData::Mat4(self.projection),
                         ),
                         (
                             &gl.get_uniform(&self.shader, "u_texture"),

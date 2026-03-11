@@ -110,14 +110,13 @@ impl ConsoleScreen {
                 state.console.restore_pos();
                 state.console.print(PROMPT.as_ref());
                 state.console.print(&self.input_buffer);
-                state.console.print(&['\n' as u8]);
+                state.console.print(b"\n");
                 state.console.save_pos();
                 let input = std::str::from_utf8(&self.input_buffer).unwrap().to_string();
                 self.input_buffer.clear();
                 if !input.is_empty() {
                     let recent = state
-                        .console_history
-                        .get(0)
+                        .console_history.first()
                         .map(|s| s.as_str())
                         .unwrap_or("");
                     if input.as_str() != recent {
@@ -248,7 +247,7 @@ impl Screen<AppState> for ConsoleScreen {
                                 Err(error) => {
                                     app_state.console.print("ERROR: ".as_bytes());
                                     app_state.console.print(error.as_bytes());
-                                    app_state.console.print(&['\n' as u8]);
+                                    app_state.console.print(b"\n");
                                 }
                             }
                             app_state.console.save_pos();

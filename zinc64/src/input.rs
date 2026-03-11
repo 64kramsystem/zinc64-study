@@ -2,7 +2,7 @@
 // Copyright (c) 2016-2019 Sebastian Jastrzebski. All rights reserved.
 // Licensed under the GPLv3. See LICENSE file in the project root for full license text.
 
-#![cfg_attr(feature = "cargo-clippy", allow(clippy::cast_lossless))]
+#![allow(clippy::cast_lossless)]
 
 use std::collections::HashSet;
 
@@ -26,33 +26,27 @@ impl InputSystem {
     }
 
     pub fn handle_event(&mut self, c64: &mut C64, event: &Event<()>) {
-        match event {
-            Event::WindowEvent { event, .. } => match event {
-                WindowEvent::KeyboardInput {
-                    input:
-                        KeyboardInput {
-                            virtual_keycode: Some(virtual_code),
-                            state,
-                            modifiers,
-                            ..
-                        },
-                    ..
-                } => match (virtual_code, state) {
-                    (_, ElementState::Pressed) => {
-                        if let Some(key_event) = KeyMap::map_key(*virtual_code, *modifiers) {
-                            c64.get_keyboard().on_key_down(key_event);
-                        }
-                    }
-                    (_, ElementState::Released) => {
-                        if let Some(key_event) = KeyMap::map_key(*virtual_code, *modifiers) {
-                            c64.get_keyboard().on_key_up(key_event);
-                        }
-                    }
-                },
-                _ => (),
-            },
-            _ => (),
-        }
+        if let Event::WindowEvent { event, .. } = event { if let WindowEvent::KeyboardInput {
+                input:
+                    KeyboardInput {
+                        virtual_keycode: Some(virtual_code),
+                        state,
+                        modifiers,
+                        ..
+                    },
+                ..
+            } = event { match (virtual_code, state) {
+            (_, ElementState::Pressed) => {
+                if let Some(key_event) = KeyMap::map_key(*virtual_code, *modifiers) {
+                    c64.get_keyboard().on_key_down(key_event);
+                }
+            }
+            (_, ElementState::Released) => {
+                if let Some(key_event) = KeyMap::map_key(*virtual_code, *modifiers) {
+                    c64.get_keyboard().on_key_up(key_event);
+                }
+            }
+        } } }
         // FIXME self.handle_joystick_event(c64, event);
     }
 

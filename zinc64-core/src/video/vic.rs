@@ -2,8 +2,8 @@
 // Copyright (c) 2016-2019 Sebastian Jastrzebski. All rights reserved.
 // Licensed under the GPLv3. See LICENSE file in the project root for full license text.
 
-#![cfg_attr(feature = "cargo-clippy", allow(clippy::cast_lossless))]
-#![cfg_attr(feature = "cargo-clippy", allow(clippy::cyclomatic_complexity))]
+#![allow(clippy::cast_lossless)]
+#![allow(clippy::cognitive_complexity)]
 
 use crate::factory::{Chip, VicModel, VideoOutput};
 use crate::util::*;
@@ -1027,7 +1027,7 @@ impl Chip for Vic {
             }
             // Reg::MX8
             0x10 => {
-                for i in 0..8 as usize {
+                for i in 0..8_usize {
                     self.sprite_units[i].config.x.set_bit(8, value.get_bit(i));
                     self.sprite_units[i].config.x_screen =
                         self.map_sprite_to_screen(self.sprite_units[i].config.x);
@@ -1063,7 +1063,7 @@ impl Chip for Vic {
             0x14 => {}
             // Reg::ME
             0x15 => {
-                for i in 0..8 as usize {
+                for i in 0..8_usize {
                     self.sprite_units[i].config.enabled = value.get_bit(i);
                 }
             }
@@ -1077,7 +1077,7 @@ impl Chip for Vic {
             }
             // Reg::MYE
             0x17 => {
-                for i in 0..8 as usize {
+                for i in 0..8_usize {
                     self.sprite_units[i].config.expand_y = value.get_bit(i);
                     /*
                     Section: 3.8. Sprites
@@ -1108,13 +1108,13 @@ impl Chip for Vic {
             }
             // Reg::MDP
             0x1b => {
-                for i in 0..8 as usize {
+                for i in 0..8_usize {
                     self.mux_unit.config.data_priority[i] = value.get_bit(i);
                 }
             }
             // Reg::MMC
             0x1c => {
-                for i in 0..8 as usize {
+                for i in 0..8_usize {
                     self.sprite_units[i].config.mode = if !value.get_bit(i) {
                         SpriteMode::Standard
                     } else {
@@ -1124,7 +1124,7 @@ impl Chip for Vic {
             }
             // Reg::MXE
             0x1d => {
-                for i in 0..8 as usize {
+                for i in 0..8_usize {
                     self.sprite_units[i].config.expand_x = value.get_bit(i);
                 }
             }
@@ -1138,7 +1138,7 @@ impl Chip for Vic {
             0x21..=0x24 => self.gfx_seq.config.bg_color[reg as usize - 0x21] = value & 0x0f,
             // Reg::MM0  - Reg::MM1
             0x25..=0x26 => {
-                for i in 0..8 as usize {
+                for i in 0..8_usize {
                     self.sprite_units[i].config.multicolor[reg as usize - 0x25] = value & 0x0f;
                 }
             }

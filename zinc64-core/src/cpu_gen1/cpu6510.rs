@@ -2,7 +2,7 @@
 // Copyright (c) 2016-2019 Sebastian Jastrzebski. All rights reserved.
 // Licensed under the GPLv3. See LICENSE file in the project root for full license text.
 
-#![cfg_attr(feature = "cargo-clippy", allow(clippy::cast_lossless))]
+#![allow(clippy::cast_lossless)]
 
 use crate::factory::{make_noop, Addressable, Cpu, Register, TickFn};
 use crate::util::{IoPort, IrqLine, Pin, Shared};
@@ -504,7 +504,7 @@ impl Cpu6510 {
                 self.regs.x = (result & 0xff) as u8;
             }
             Instruction::LAX(ref op) => {
-                let value = op.get(&self, tick_fn);
+                let value = op.get(self, tick_fn);
                 self.update_nz(value);
                 self.regs.a = value;
                 self.regs.x = value;
