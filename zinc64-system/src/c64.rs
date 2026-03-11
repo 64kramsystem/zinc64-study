@@ -32,7 +32,7 @@ use zinc64_core::mem::{ExpansionPort, Pla};
 #[derive(Copy, Clone)]
 enum BaseAddr {
     Basic = 0xa000,
-    // Boot completion sentinel; can't be triggered multiple times because of the C64#autostart flag.
+    // SAV: Boot completion sentinel; can't be triggered multiple times because of the C64#autostart flag.
     BootComplete = 0xa65c,
     Charset = 0xd000,
     Kernal = 0xe000,
@@ -64,6 +64,7 @@ pub struct C64 {
     keyboard: Keyboard,
     // Buffers
     frame_buffer: Shared<dyn VideoOutput>,
+    // SAV: Sound is on another thread, so we need Arc.
     sound_buffer: Arc<dyn SoundOutput>,
     // Runtime State
     autostart: Option<Autostart>,
@@ -86,10 +87,11 @@ impl C64 {
         let clock = Rc::new(Clock::default());
         let joystick_1_state = new_shared_cell(0u8);
         let joystick_2_state = new_shared_cell(0u8);
+        // SAV: 1 byte for each row/column (for convenience; could be 1 bit)
         let keyboard_matrix = new_shared([0; 16]);
         let vsync_flag = new_shared_cell(false);
         let vic_base_address = new_shared_cell(0u16);
-
+HI!!
         // I/O Lines
         let ba_line = new_shared(Pin::new_high());
         let cpu_io_port = new_shared(IoPort::new(0x00, 0xff));
