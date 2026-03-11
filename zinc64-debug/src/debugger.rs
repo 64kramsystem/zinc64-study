@@ -8,8 +8,6 @@ use std::io;
 use std::io::{BufRead, BufReader, BufWriter, Cursor, Error, Write};
 use std::net::{SocketAddr, TcpListener, TcpStream};
 use std::sync::mpsc;
-use std::u16;
-use std::u8;
 
 use bit_field::BitField;
 use byteorder::{BigEndian, ReadBytesExt};

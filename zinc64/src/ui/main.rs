@@ -168,6 +168,7 @@ impl MainScreen {
 }
 
 impl Screen<AppState> for MainScreen {
+    #[allow(deprecated)]
     fn handle_event(
         &mut self,
         ctx: &mut Context,

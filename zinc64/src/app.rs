@@ -30,6 +30,7 @@ pub enum JamAction {
     Reset,
 }
 
+#[allow(dead_code)]
 pub struct Options {
     // Emulator
     pub jam_action: JamAction,
@@ -69,6 +70,7 @@ pub struct App {
 }
 
 impl App {
+    #[allow(clippy::vec_init_then_push)]
     pub fn build(
         ctx: &mut Context,
         c64: C64,

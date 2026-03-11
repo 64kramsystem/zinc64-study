@@ -62,6 +62,7 @@ impl HwType {
     }
 
     pub fn is_mirrowed(&self) -> bool {
+        #[allow(clippy::match_like_matches_macro)]
         match *self {
             HwType::OceanType1 | HwType::MagicDesk | HwType::Normal => true,
             _ => false,
@@ -96,6 +97,7 @@ pub struct Cartridge {
     exrom: bool,
     game: bool,
     banks: [Option<Chip>; 64],
+    #[allow(clippy::type_complexity)]
     io_observer: Option<Box<dyn Fn(&IoConfig)>>,
     is_mirrowed: bool,
     // Runtime state
@@ -128,6 +130,7 @@ impl Cartridge {
         }
     }
 
+    #[allow(clippy::type_complexity)]
     pub fn set_io_observer(&mut self, observer: Option<Box<dyn Fn(&IoConfig)>>) {
         self.io_observer = observer;
     }

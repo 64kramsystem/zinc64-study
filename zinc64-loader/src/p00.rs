@@ -43,6 +43,7 @@ impl Image for P00Image {
 pub struct P00Loader;
 
 impl P00Loader {
+    #[allow(clippy::new_ret_no_self)]
     pub fn new() -> impl Loader {
         Self {}
     }

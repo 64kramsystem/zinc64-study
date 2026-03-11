@@ -521,6 +521,7 @@ pub enum UniformData {
 
 // -- Resources
 
+#[allow(dead_code)]
 pub struct Buffer {
     gl: Rc<glow::Context>,
     id: <glow::Context as HasContext>::Buffer,
@@ -541,6 +542,7 @@ impl PartialEq for Buffer {
     }
 }
 
+#[allow(dead_code)]
 pub struct Framebuffer {
     gl: Rc<glow::Context>,
     id: <glow::Context as HasContext>::Framebuffer,

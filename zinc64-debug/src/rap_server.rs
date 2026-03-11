@@ -11,8 +11,6 @@ use std::net::{SocketAddr, TcpListener, TcpStream};
 use std::str;
 use std::sync::mpsc;
 use std::sync::mpsc::{Receiver, Sender};
-use std::u16;
-use std::u8;
 
 use byteorder::{BigEndian, ReadBytesExt, WriteBytesExt};
 

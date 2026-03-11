@@ -115,6 +115,7 @@ pub struct Opt {
         default_value = "127.0.0.1:9999",
         parse(try_from_str = parse_socket_addr)
     )]
+    #[allow(dead_code)]
     pub rap_address: SocketAddr,
 
     // -- Logging

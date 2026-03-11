@@ -233,6 +233,7 @@ where
 }
 
 fn is_symbol(c: char) -> bool {
+    #[allow(clippy::match_like_matches_macro)]
     match c {
         '<' | '=' | '>' | '!' => true,
         _ => false,

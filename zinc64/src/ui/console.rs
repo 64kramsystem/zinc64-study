@@ -206,6 +206,7 @@ impl ConsoleScreen {
 }
 
 impl Screen<AppState> for ConsoleScreen {
+    #[allow(deprecated)]
     fn handle_event(
         &mut self,
         ctx: &mut Context,

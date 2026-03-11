@@ -28,6 +28,7 @@ impl Image for PrgImage {
 pub struct PrgLoader;
 
 impl PrgLoader {
+    #[allow(clippy::new_ret_no_self)]
     pub fn new() -> impl Loader {
         Self {}
     }

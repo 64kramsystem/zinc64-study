@@ -25,6 +25,7 @@ impl InputSystem {
         })
     }
 
+    #[allow(deprecated, clippy::collapsible_match)]
     pub fn handle_event(&mut self, c64: &mut C64, event: &Event<()>) {
         if let Event::WindowEvent { event, .. } = event { if let WindowEvent::KeyboardInput {
                 input:

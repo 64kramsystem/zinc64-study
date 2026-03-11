@@ -11,6 +11,7 @@ use zinc64_loader::{Reader, Result};
 
 pub struct FileReader(pub BufReader<File>);
 
+#[allow(deprecated)]
 impl Reader for FileReader {
     fn read(&mut self, buf: &mut [u8]) -> Result<usize> {
         self.0.read(buf).map_err(|err| err.description().to_owned())

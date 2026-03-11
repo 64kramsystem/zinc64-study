@@ -212,6 +212,7 @@ impl Batch {
         );
     }
 
+    #[allow(clippy::too_many_arguments)]
     pub fn push_raw(
         &mut self,
         gl: &mut GlDevice,

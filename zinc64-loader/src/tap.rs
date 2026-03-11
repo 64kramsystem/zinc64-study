@@ -47,6 +47,7 @@ impl Image for TapImage {
 pub struct TapLoader;
 
 impl TapLoader {
+    #[allow(clippy::new_ret_no_self)]
     pub fn new() -> impl Loader {
         Self {}
     }

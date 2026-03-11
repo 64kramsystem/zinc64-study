@@ -48,6 +48,7 @@ pub struct JoystickConfig {
 }
 
 impl JoystickConfig {
+    #[allow(clippy::should_implement_trait)]
     pub fn default() -> JoystickConfig {
         JoystickConfig {
             axis_motion_threshold: 3200,
@@ -64,6 +65,7 @@ pub struct RomData {
 }
 
 impl RomData {
+    #[allow(clippy::should_implement_trait)]
     pub fn default() -> Self {
         RomData {
             basic: vec![0x00; 0x2000],
@@ -89,6 +91,7 @@ pub struct SoundConfig {
 }
 
 impl SoundConfig {
+    #[allow(clippy::should_implement_trait)]
     pub fn default() -> SoundConfig {
         SoundConfig {
             enable: true,

@@ -215,6 +215,7 @@ impl Vic {
         let x_start = (self.cycle << 3) - 12;
         let x_scroll_start = x_start + self.x_scroll as u16;
         let mut pixel_idx = self.y as usize * self.frame_buffer_width + x_start as usize;
+        #[allow(clippy::explicit_counter_loop)]
         for x in x_start..x_start + 8 {
             if !self.border_unit.is_enabled() {
                 if x == x_scroll_start {
@@ -249,6 +250,7 @@ impl Vic {
         let x_start = (self.cycle << 3) - 12;
         let x_scroll_start = x_start + self.x_scroll as u16;
         let mut pixel_idx = self.y as usize * self.frame_buffer_width + x_start as usize;
+        #[allow(clippy::explicit_counter_loop)]
         for x in x_start..x_start + 8 {
             self.border_unit.update_main_flop(x, self.y, self.den);
             if !self.border_unit.is_enabled() {
@@ -283,6 +285,7 @@ impl Vic {
     fn draw_border(&mut self) {
         let x_start = (self.cycle << 3) - 12;
         let mut pixel_idx = self.y as usize * self.frame_buffer_width + x_start as usize;
+        #[allow(clippy::explicit_counter_loop)]
         for x in x_start..x_start + 8 {
             self.border_unit.update_main_flop(x, self.y, self.den);
             self.mux_unit.feed_border(self.border_unit.output());

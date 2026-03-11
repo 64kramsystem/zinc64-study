@@ -60,6 +60,7 @@ impl Image for CrtImage {
 pub struct CrtLoader;
 
 impl CrtLoader {
+    #[allow(clippy::new_ret_no_self)]
     pub fn new() -> impl Loader {
         Self {}
     }
