@@ -32,6 +32,7 @@ use zinc64_core::mem::{ExpansionPort, Pla};
 #[derive(Copy, Clone)]
 enum BaseAddr {
     Basic = 0xa000,
+    // Boot completion sentinel; can't be triggered multiple times because of the C64#autostart flag.
     BootComplete = 0xa65c,
     Charset = 0xd000,
     Kernal = 0xe000,
