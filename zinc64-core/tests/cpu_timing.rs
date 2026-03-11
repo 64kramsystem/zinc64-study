@@ -312,7 +312,7 @@ fn opcode_timing() {
                 clock_clone.set(clock_clone.get().wrapping_add(1));
             });
             cpu.reset();
-            cpu.write_mem(0x1000, opcode as u8);
+            cpu.write_mem(0x1000, opcode);
             cpu.write_mem(0x1001, 0x00);
             cpu.write_mem(0x2000, 0x00);
             cpu.write_mem(0x2001, 0x10);
@@ -339,7 +339,7 @@ fn opcode_timing() {
                 cycles,
                 clock.get(),
                 "opcode {:02x} timing failed",
-                opcode as u8
+                opcode
             );
         }
     }

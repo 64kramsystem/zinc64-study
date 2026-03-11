@@ -508,23 +508,23 @@ mod tests {
         {
             cia.clock(); // COUNT0|COUNT1
             let cpu_irq = cia.irq_line.borrow();
-            assert_eq!(false, cpu_irq.is_low());
+            assert!(!cpu_irq.is_low());
         }
         {
             cia.clock(); // COUNT2
             let cpu_irq = cia.irq_line.borrow();
-            assert_eq!(false, cpu_irq.is_low());
+            assert!(!cpu_irq.is_low());
         }
         {
             cia.clock(); // COUNT3|INT0
             let cpu_irq = cia.irq_line.borrow();
-            assert_eq!(false, cpu_irq.is_low());
+            assert!(!cpu_irq.is_low());
         }
         {
             cia.clock(); // INT1
             assert_eq!(1, cia.timer_a.get_counter());
             let cpu_irq = cia.irq_line.borrow();
-            assert_eq!(true, cpu_irq.is_low());
+            assert!(cpu_irq.is_low());
         }
     }
 
@@ -542,23 +542,23 @@ mod tests {
         {
             cia.clock(); // COUNT0|COUNT1
             let cpu_irq = cia.irq_line.borrow();
-            assert_eq!(false, cpu_irq.is_low());
+            assert!(!cpu_irq.is_low());
         }
         {
             cia.clock(); // COUNT2
             let cpu_irq = cia.irq_line.borrow();
-            assert_eq!(false, cpu_irq.is_low());
+            assert!(!cpu_irq.is_low());
         }
         {
             cia.clock(); // COUNT3|INT0
             let cpu_irq = cia.irq_line.borrow();
-            assert_eq!(false, cpu_irq.is_low());
+            assert!(!cpu_irq.is_low());
         }
         {
             cia.clock(); // INT1
             assert_eq!(1, cia.timer_b.get_counter());
             let cpu_irq = cia.irq_line.borrow();
-            assert_eq!(true, cpu_irq.is_low());
+            assert!(cpu_irq.is_low());
         }
     }
 

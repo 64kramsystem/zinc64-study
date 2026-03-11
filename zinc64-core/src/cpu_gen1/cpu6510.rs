@@ -809,9 +809,9 @@ mod tests {
         cpu.set_flag(Flag::Carry, false);
         cpu.execute(&Instruction::ADC(Operand::Immediate(16)), &make_noop());
         assert_eq!(96, cpu.get_register(Register::A));
-        assert_eq!(false, cpu.test_flag(Flag::Carry));
-        assert_eq!(false, cpu.test_flag(Flag::Negative));
-        assert_eq!(false, cpu.test_flag(Flag::Overflow));
+        assert!(!cpu.test_flag(Flag::Carry));
+        assert!(!cpu.test_flag(Flag::Negative));
+        assert!(!cpu.test_flag(Flag::Overflow));
     }
 
     #[test]
@@ -820,7 +820,7 @@ mod tests {
         cpu.set_register(Register::A, 0xff);
         cpu.execute(&Instruction::INC(Operand::Accumulator), &make_noop());
         assert_eq!(0x00, cpu.get_register(Register::A));
-        assert_eq!(false, cpu.test_flag(Flag::Negative));
-        assert_eq!(true, cpu.test_flag(Flag::Zero));
+        assert!(!cpu.test_flag(Flag::Negative));
+        assert!(cpu.test_flag(Flag::Zero));
     }
 }
